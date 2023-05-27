@@ -2,25 +2,27 @@ import common_imports
 
 class LinearActuator:
     def __init__(self):
-        # Linear actuator initialization code
-        pass
+        self.enabled = False
 
     def enable(self):
-        # Enable linear actuator
-        pass
+        self.enabled = True
+        common_imports.logging.info("Linear actuator enabled.")
 
     def disable(self):
-        # Disable linear actuator
-        pass
+        self.enabled = False
+        common_imports.logging.info("Linear actuator disabled.")
 
     def move_forward(self):
-        # Move linear actuator forward
-        pass
+        if self.enabled:
+            common_imports.logging.info("Linear actuator moving forward.")
+        else:
+            common_imports.logging.info("Linear actuator is not enabled. Unable to move forward.")
 
     def move_backward(self):
-        # Move linear actuator backward
-        pass
+        if self.enabled:
+            common_imports.logging.info("Linear actuator moving backward.")
+        else:
+            common_imports.logging.info("Linear actuator is not enabled. Unable to move backward.")
 
     def stop(self):
-        # Stop linear actuator
-        pass
+        common_imports.logging.info("Linear actuator stopped.")

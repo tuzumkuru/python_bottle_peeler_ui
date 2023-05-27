@@ -1,23 +1,29 @@
 import common_imports
-from ethernet_motor import EthernetMotor
-from serial_motor import SerialMotor
-from linear_actuator import LinearActuator
+from controller import Controller
+import threading
 
 class System:
     def __init__(self):
-        # System initialization code
-        self.motor1 = EthernetMotor()
-        self.motor2 = SerialMotor()
-        self.linear_actuator = LinearActuator()
+        self.controller = Controller()
+        self.running = False
+        self.thread = None
 
     def start(self):
-        # Start the system
-        common_imports.logging.info("Starting system!")
-        self.motor1.enable()
-        self.motor2.enable()
+        if not self.running:
+            common_imports.logging.info("Initializing the system...")
+            self.running = True
+            self.thread = threading.Thread(target=self.controller.start)
+            self.thread.start()
+            common_imports.logging.info("System started.")
+        else:
+            common_imports.logging.info("System is already running.")
 
     def stop(self):
-        # Stop the system
-        self.motor1.disable()
-        self.motor2.disable()
-        self.linear_actuator.disable()
+        if self.running:
+            self.controller.stop()
+            self.thread.join()
+            self.running = False
+            common_imports.logging.info("System stopped.")
+        else:
+            common_imports.logging.info("System is not running.")
+

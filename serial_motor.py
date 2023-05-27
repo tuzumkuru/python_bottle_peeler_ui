@@ -1,17 +1,12 @@
-import common_imports
 from motor import Motor
+import common_imports
 
 class SerialMotor(Motor):
     def __init__(self):
         super().__init__()
-        # Specific initialization code for serial motor
+        common_imports.logging.info("Serial motor initialized.")
 
-    def enable(self):
-        # Enable serial motor
-        pass
-
-    def disable(self):
-        # Disable serial motor
-        pass
-
-    # Implement other serial motor-specific methods
+    def get_current(self):
+        # Logic to retrieve and return the current of the SerialMotor
+        current = 15  # Placeholder value, replace with actual current reading
+        return current
