@@ -1,5 +1,6 @@
 import common_imports
 import time
+from pubsub import pub
 from ethernet_motor import EthernetMotor
 from serial_motor import SerialMotor
 from linear_actuator import LinearActuator
@@ -12,12 +13,12 @@ class Controller:
         self.running = False
 
     def start(self):
-        common_imports.logging.info("Starting the system...")
+        common_imports.logging.info("Starting the controller...")
+        self._set_running(True)
         self.ethernet_motor.enable()
         self.serial_motor.enable()
         self.ethernet_motor.set_speed(50)  # Set desired speed for ethernet motor
-        self.serial_motor.set_speed(30)    # Set desired speed for serial motor
-        self.running = True
+        self.serial_motor.set_speed(30)    # Set desired speed for serial motor        
 
         while self.running:
             current = self.serial_motor.get_current()
@@ -30,14 +31,18 @@ class Controller:
 
 
     def stop(self):
-        self.running = False
         self.linear_actuator.stop()
         self.serial_motor.stop()
         self.ethernet_motor.stop()
         self.linear_actuator.disable()
         self.ethernet_motor.disable()
         self.serial_motor.disable()
-        common_imports.logging.info("System stopped.")
+        self._set_running(False)
+        common_imports.logging.info("Controller stopped.")
 
     def is_running(self):
         return self.running
+    
+    def _set_running(self, state:bool):
+        self.running = state
+        pub.sendMessage("controller_state_changed")

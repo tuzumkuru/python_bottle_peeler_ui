@@ -64,7 +64,7 @@ class GUI:
     def emergency_stop(self):
         self.system.emergency_stop()
 
-    def on_system_state_changed(self, enabled, running):
+    def on_system_state_changed(self):
         self.update_button_state()
 
     def update_button_state(self):

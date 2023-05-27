@@ -13,27 +13,27 @@ class System:
         self.motor2 = SerialMotor()
         self.linear_actuator = LinearActuator()
         self.controller = Controller(self.motor1, self.motor2, self.linear_actuator)
-        self.running = False
         self.thread = None
+        pub.subscribe(self.on_controller_state_changed, "controller_state_changed")
+        
 
     def start(self):
-        if not self.running:
+        if not self.controller.running:
             common_imports.logging.info("Initializing the system...")
             self.running = True
             self.thread = threading.Thread(target=self.controller.start)
             self.thread.start()
             common_imports.logging.info("System started.")
-            pub.sendMessage("system_state_changed", enabled=self.is_enabled(), running=True)
+            # pub.sendMessage("system_state_changed")
         else:
             common_imports.logging.info("System is already running.")
 
     def stop(self):
-        if self.running:
+        if self.controller.running:
             self.controller.stop()
             self.thread.join()
-            self.running = False
             common_imports.logging.info("System stopped.")
-            pub.sendMessage("system_state_changed", enabled=self.is_enabled(), running=False)
+            # pub.sendMessage("system_state_changed")
         else:
             common_imports.logging.info("System is not running.")
 
@@ -42,14 +42,14 @@ class System:
         self.motor1.enable()
         self.motor2.enable()
         self.linear_actuator.enable()
-        pub.sendMessage("system_state_changed", enabled=self.is_enabled(), running=self.is_running())
+        pub.sendMessage("system_state_changed")
 
     def disable(self):
         common_imports.logging.info("Disabling all actuators...")
         self.motor1.disable()
         self.motor2.disable()
         self.linear_actuator.disable()
-        pub.sendMessage("system_state_changed", enabled=self.is_enabled(), running=self.is_running())
+        pub.sendMessage("system_state_changed")
 
     def rewind(self):
         common_imports.logging.info("Rewinding the linear actuator...")
@@ -58,9 +58,14 @@ class System:
     def emergency_stop(self):
         common_imports.logging.info("Performing emergency stop...")
         self.disable()
+        self.controller.stop()
 
     def is_enabled(self):
         return self.motor1.is_enabled() and self.motor2.is_enabled() and self.linear_actuator.is_enabled()
 
     def is_running(self):
         return self.controller.is_running()
+
+    def on_controller_state_changed(self):
+
+        pub.sendMessage("system_state_changed")
