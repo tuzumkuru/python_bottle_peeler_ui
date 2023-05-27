@@ -28,12 +28,15 @@ class GUI:
         self.enable_button.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         self.run_button.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
         self.rewind_button.grid(row=0, column=2, sticky="nsew", padx=10, pady=10)
-        self.emergency_stop_button.grid(row=1, column=0, columnspan=3, sticky="ew", padx=10, pady=10)
+        self.emergency_stop_button.grid(row=1, column=0, columnspan=3, sticky="nsew", padx=10, pady=10)
 
         # Configure column weights to make buttons square and prevent stretching
-        self.root.grid_columnconfigure(0, weight=1)
-        self.root.grid_columnconfigure(1, weight=1)
-        self.root.grid_columnconfigure(2, weight=1)
+        self.root.grid_columnconfigure(0, weight=1, uniform="buttons")
+        self.root.grid_columnconfigure(1, weight=1, uniform="buttons")
+        self.root.grid_columnconfigure(2, weight=1, uniform="buttons")
+
+        # Configure row weight to keep buttons centered vertically
+        self.root.grid_rowconfigure(0, weight=1)
 
         # Subscribe to state change events
         pub.subscribe(self.on_system_state_changed, "system_state_changed")

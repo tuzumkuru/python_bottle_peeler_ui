@@ -1,4 +1,5 @@
 import common_imports
+import time
 from ethernet_motor import EthernetMotor
 from serial_motor import SerialMotor
 from linear_actuator import LinearActuator
@@ -25,6 +26,8 @@ class Controller:
                 self.linear_actuator.move_forward()
             else:
                 self.linear_actuator.stop()
+            time.sleep(0.1)
+
 
     def stop(self):
         self.running = False
