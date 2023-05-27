@@ -4,10 +4,10 @@ from serial_motor import SerialMotor
 from linear_actuator import LinearActuator
 
 class Controller:
-    def __init__(self):
-        self.ethernet_motor = EthernetMotor()
-        self.serial_motor = SerialMotor()
-        self.linear_actuator = LinearActuator()
+    def __init__(self, ethernet_motor, serial_motor, linear_actuator):
+        self.ethernet_motor = ethernet_motor
+        self.serial_motor = serial_motor
+        self.linear_actuator = linear_actuator
         self.running = False
 
     def start(self):
@@ -31,6 +31,10 @@ class Controller:
         self.linear_actuator.stop()
         self.serial_motor.stop()
         self.ethernet_motor.stop()
+        self.linear_actuator.disable()
         self.ethernet_motor.disable()
         self.serial_motor.disable()
         common_imports.logging.info("System stopped.")
+
+    def is_running(self):
+        return self.running

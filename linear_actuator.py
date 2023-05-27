@@ -26,3 +26,6 @@ class LinearActuator:
 
     def stop(self):
         common_imports.logging.info("Linear actuator stopped.")
+
+    def is_enabled(self):
+        return self.enabled

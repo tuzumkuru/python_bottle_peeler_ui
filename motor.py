@@ -23,3 +23,6 @@ class Motor:
     def stop(self):
         self.speed = 0
         common_imports.logging.info("Motor stopped.")
+
+    def is_enabled(self):
+        return self.enabled
