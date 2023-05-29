@@ -1,3 +1,4 @@
+import os
 import common_imports
 from ethernet_motor import EthernetMotor
 from serial_motor import SerialMotor
@@ -5,13 +6,23 @@ from linear_actuator import LinearActuator
 from controller import Controller
 import threading
 from pubsub import pub
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class System:
     def __init__(self):
         # System initialization code
         self.motor1 = EthernetMotor()
+        self.motor1.connect(os.getenv("ETH_DRIVE_IP"),int(os.getenv("ETH_DRIVE_UDP_PORT")))
+
         self.motor2 = SerialMotor()
+        self.motor2.init(os.getenv("SER_DRIVE_SER_PORT"))
+        self.motor2.connect()
+
         self.linear_actuator = LinearActuator()
+
+
         self.controller = Controller(self.motor1, self.motor2, self.linear_actuator)
         self.thread = None
         pub.subscribe(self.on_controller_state_changed, "controller_state_changed")

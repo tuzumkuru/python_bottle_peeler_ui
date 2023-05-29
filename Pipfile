@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 pypubsub = "*"
+pyserial = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
