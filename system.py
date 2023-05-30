@@ -20,7 +20,7 @@ class System:
         self.motor2.init(os.getenv("SER_DRIVE_SER_PORT"))
         self.motor2.connect()
 
-        self.linear_actuator = LinearActuator()
+        self.linear_actuator = LinearActuator(int(os.getenv("ACTUATOR_FORWARD_PIN")),int(os.getenv("ACTUATOR_BACKWARD_PIN")),int(os.getenv("ACTUATOR_ENABLE_PIN")))
 
 
         self.controller = Controller(self.motor1, self.motor2, self.linear_actuator)

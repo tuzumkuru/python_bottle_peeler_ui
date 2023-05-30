@@ -7,6 +7,7 @@ name = "pypi"
 pypubsub = "*"
 pyserial = "*"
 python-dotenv = "*"
+"rpi.gpio" = "*"
 
 [dev-packages]
 
